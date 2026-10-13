@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>One more game? — Think Before You React</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="eyebrow">THINK BEFORE YOU REACT</p>
+      <h1>One more game?</h1>
+      <p>I always say it's my last one. This time, let's check.</p>
+    </header>
+
+    <section class="setup" aria-label="Before you play">
+      <div>
+        <label for="mood">How are you feeling?</label>
+        <select id="mood">
+          <option value="calm">I'm good</option>
+          <option value="annoyed">That last game annoyed me</option>
+          <option value="tired">I'm tired</option>
+        </select>
+      </div>
+      <div>
+        <label for="time">Time left to play</label>
+        <select id="time">
+          <option value="10">10 minutes</option>
+          <option value="30" selected>30 minutes</option>
+          <option value="60">1 hour</option>
+          <option value="90">1 hour and a half</option>
+        </select>
+      </div>
+    </section>
+
+    <section id="result" class="result play" aria-live="polite" aria-atomic="true">
+      <p id="status" class="eyebrow">PLAY</p>
+      <h2 id="advice">Go on, one more.</h2>
+      <p id="reason">You've got time and you're feeling good. Enjoy the game.</p>
+    </section>
+
+    <section class="session" aria-label="Your session">
+      <div class="session-heading">
+        <h2>This session</h2>
+        <span id="time-left">30 min left</span>
+      </div>
+      <p id="score">0 wins · 0 losses · 0 played</p>
+      <p class="hint">Finished a game? Add the result. Each one uses 15 minutes.</p>
+      <div class="buttons">
+        <button id="win" type="button">I won</button>
+        <button id="loss" type="button">I lost</button>
+      </div>
+      <button id="break" class="break-button" type="button" hidden>I'm back from a break</button>
+      <p id="last-action" class="hint" aria-live="polite">Your results stay here until you reset or refresh.</p>
+    </section>
+
+    <footer>
+      <span>Be honest. Even about the losses.</span>
+      <button id="reset" type="button">Start over</button>
+    </footer>
+    <noscript>Please enable JavaScript to use the session tracker.</noscript>
+  </main>
+</body>
+</html>
