@@ -1,9 +1,9 @@
-# One more game?
+# My shoes are already on.
 
-My Think Before You React lab. A page that helps you decide whether to play another game.
+Think Before You React lab: deciding whether to go to the gym while still sitting on the bed.
 
-Choose your mood and how much time you have, then record wins and losses. There are three outcomes: play, take a break, or stop. Two losses in a row trigger a break. Being tired, playing five games, or having less than 15 minutes left triggers a stop. Each game uses 15 minutes.
+Pick your energy level and free time. The page suggests heading out, keeping the visit short, or skipping the gym trip/resting. Clicking “Give me 5 more minutes” reduces the time left and remembers how many times you've delayed. After two clicks, the plan gets smaller, even if you originally had enough time.
 
-The JavaScript keeps track of wins, losses, the loss streak, and time left with variables. The updatePage function uses if/else conditions to change the message and buttons. State resets when the page refreshes or you click Start over.
+JavaScript variables store the time and delay count. An if/else chain checks energy, time, and previous actions to update the message and colour. The Start over button resets everything. Refreshing also resets the page. The five-minute button simulates time passing; it is not a live timer.
 
-Open index.html in a browser to try it. No installation or external libraries needed.
+Open index.html in a browser. No libraries or installation needed.

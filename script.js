@@ -1,87 +1,73 @@
-let wins = 0;
-let losses = 0;
-let lossStreak = 0;
-let minutesLeft = 30;
+let minutesLeft = 60;
+let delays = 0;
 
-const mood = document.querySelector('#mood');
+const energy = document.querySelector('#energy');
 const time = document.querySelector('#time');
 const result = document.querySelector('#result');
 const status = document.querySelector('#status');
 const advice = document.querySelector('#advice');
 const reason = document.querySelector('#reason');
-const winButton = document.querySelector('#win');
-const lossButton = document.querySelector('#loss');
-const breakButton = document.querySelector('#break');
+const delayButton = document.querySelector('#delay');
 const lastAction = document.querySelector('#last-action');
 
 function updatePage() {
-  let gamesPlayed = wins + losses;
-  let state = 'play';
-
-  // Check the stopping conditions before suggesting another game.
-  if (minutesLeft < 15) {
-    state = 'stop';
-    advice.textContent = 'Leave it there.';
-    reason.textContent = "There's not enough time for a full game. Next time.";
-  } else if (mood.value === 'tired' || gamesPlayed >= 5) {
-    state = 'stop';
-    advice.textContent = 'Call it a night.';
-    reason.textContent = "You've had enough for now. The game will be here tomorrow.";
-  } else if (mood.value === 'annoyed' || lossStreak >= 2) {
-    state = 'pause';
-    advice.textContent = 'Put the controller down for a bit.';
-    reason.textContent = "Don't queue just to win it back. Get some water, then decide.";
+  // Energy and time come first. Waiting can also change the plan.
+  if (energy.value === 'tired') {
+    result.className = 'result rest';
+    status.textContent = 'REST TODAY';
+    advice.textContent = 'Take the shoes off.';
+    reason.textContent = "If you're actually worn out, leave the gym for another day.";
+  } else if (minutesLeft < 20) {
+    result.className = 'result rest';
+    status.textContent = 'SKIP THE TRIP';
+    advice.textContent = 'The gym can wait.';
+    reason.textContent = "There's barely time to get there. Pick a better time instead of rushing.";
+  } else if (energy.value === 'low' || minutesLeft < 45 || delays >= 2) {
+    result.className = 'result short';
+    status.textContent = 'KEEP IT SHORT';
+    advice.textContent = 'Just go for a little bit.';
+    reason.textContent = "You don't need to make a whole evening of it. Keep the plan small.";
+    if (delays >= 2) {
+      reason.textContent = "You've pressed that button " + delays + " times. Make it a short visit before you lose more time.";
+    }
   } else {
-    advice.textContent = 'Go on, one more.';
-    reason.textContent = "You've got time and you're feeling good. Enjoy the game.";
+    result.className = 'result go';
+    status.textContent = 'HEAD OUT';
+    advice.textContent = 'Grab your keys.';
+    reason.textContent = "You've got time and you feel fine. Getting out the door is the hard part.";
   }
 
-  result.className = 'result ' + state;
-  status.textContent = state === 'pause' ? 'TAKE A BREAK' : state.toUpperCase();
-  document.querySelector('#score').textContent = wins + ' wins · ' + losses + ' losses · ' + gamesPlayed + ' played';
-  document.querySelector('#time-left').textContent = minutesLeft + ' min left';
-  winButton.disabled = state !== 'play';
-  lossButton.disabled = state !== 'play';
-  breakButton.hidden = state !== 'pause';
+  document.querySelector('#delay-count').textContent = 'Minutes spent putting it off: ' + delays * 5;
+  document.querySelector('#time-left').textContent = minutesLeft + ' minutes left. Each click uses 5 minutes.';
+  delayButton.disabled = minutesLeft < 5 || energy.value === 'tired';
 }
 
-function recordGame(won) {
-  if (won) {
-    wins++;
-    lossStreak = 0;
-    lastAction.textContent = 'A win. Nice.';
-  } else {
-    losses++;
-    lossStreak++;
-    lastAction.textContent = 'A loss. It happens.';
-  }
-  minutesLeft = Math.max(0, minutesLeft - 15);
-  updatePage();
-}
+energy.addEventListener('change', updatePage);
 
-winButton.addEventListener('click', function () { recordGame(true); });
-lossButton.addEventListener('click', function () { recordGame(false); });
-mood.addEventListener('change', updatePage);
 time.addEventListener('change', function () {
   minutesLeft = Number(time.value);
+  delays = 0;
+  lastAction.textContent = 'New time picked. The waiting count starts again.';
   updatePage();
 });
 
-breakButton.addEventListener('click', function () {
-  lossStreak = 0;
-  mood.value = 'calm';
-  lastAction.textContent = 'Back from your break. Update your time left if you need to.';
+delayButton.addEventListener('click', function () {
+  delays++;
+  minutesLeft -= 5;
+  if (delays === 1) {
+    lastAction.textContent = 'Five minutes. Okay, but actually five.';
+  } else {
+    lastAction.textContent = 'Still here, then.';
+  }
   updatePage();
 });
 
 document.querySelector('#reset').addEventListener('click', function () {
-  wins = 0;
-  losses = 0;
-  lossStreak = 0;
-  minutesLeft = 30;
-  mood.value = 'calm';
-  time.value = '30';
-  lastAction.textContent = 'Fresh start. Your results have been cleared.';
+  minutesLeft = 60;
+  delays = 0;
+  energy.value = 'ready';
+  time.value = '60';
+  lastAction.textContent = 'The longer you wait, the smaller the plan gets.';
   updatePage();
 });
 
